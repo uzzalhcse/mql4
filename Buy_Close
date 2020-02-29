@@ -1,0 +1,43 @@
+void OnTick()
+  {
+  /* if(OrdersTotal() == 0) {
+     OpenTrade();
+   }
+   */
+   if(OrdersTotal() < 5) {
+     BuyTrade();
+     if(AccountEquity() > AccountBalance()){
+      CloseCurrentTrade();
+     }
+   }
+   
+  }
+  
+  
+  
+void BuyTrade(){
+ int buyTicket = OrderSend(
+         Symbol(),
+         OP_BUY,
+         0.10,
+         Ask,
+         3,
+         Ask-100*_Point,
+         Ask+100*_Point,
+         NULL,
+         0,
+         0,
+         Green
+      );
+}
+void CloseCurrentTrade(){
+   for(int i=OrdersTotal(); i>0; i--){
+   // Select Order
+      if(OrderSelect(i,SELECT_BY_POS)==true){
+         if(OrderSymbol() == Symbol()) {
+         // Close Order
+            OrderClose(OrderTicket(),OrderLots(),MarketInfo(OrderSymbol(),MODE_BID),5,Red);
+         }
+      }
+   }
+}
